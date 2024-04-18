@@ -36,3 +36,5 @@ const talonTeam = [
         Location: 'Dorado, Mexico',
     }
 ]
+
+module.exports = talonTeam;

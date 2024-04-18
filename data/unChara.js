@@ -36,3 +36,5 @@ const unChara = [
         Location: 'Hanamura, Japan (formerly)',
     }
 ]
+
+module.exports = unChara;

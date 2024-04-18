@@ -36,3 +36,5 @@ const overwatchTeam = [
         Location: 'Stuttgart, Germany (formerly), Watchpoint: Gibraltar',
     }
 ]
+
+module.exports = overwatchTeam;
