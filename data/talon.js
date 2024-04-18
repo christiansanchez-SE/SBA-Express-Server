@@ -1,4 +1,4 @@
-const talonTeam = [
+const talon = [
     {
         id: 7,
         Name: 'Reaper',
@@ -43,4 +43,4 @@ const talonTeam = [
     }
 ]
 
-module.exports = talonTeam;
+module.exports = talon;

@@ -1,4 +1,4 @@
-const overwatchTeam = [
+const overwatch = [
     {
         id: 1,
         Name: 'Winston',
@@ -43,4 +43,4 @@ const overwatchTeam = [
     }
 ]
 
-module.exports = overwatchTeam;
+module.exports = overwatch;

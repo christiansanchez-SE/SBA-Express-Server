@@ -1,25 +1,43 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const bodyParser = require("body-parser");
 
 const overwatch = require("./data/overwatch");
 const talon = require("./data/talon");
 const unChara = require("./data/unChara");
 
-// ---- calling middleware function
-app.use(logger);
+// Parsing Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ extended: true }));
+
+// Logging Middlewaare
+app.use((req, res, next) => {
+    const time = new Date();
+  
+    console.log(
+      `-------
+  ${time.toLocaleTimeString()}: Received a ${req.method} request to ${req.url}.`
+    );
+    if (Object.keys(req.body).length > 0) {
+      console.log("Containing the data:");
+      console.log(`${JSON.stringify(req.body)}`);
+    }
+    next();
+  });
+
 
 // ------------------ Home Page
 app.get("/", (req, res) => {
-  console.log("Overwatch Home Page");
-  res.send("Overwatch Home Page");
+    res.send("Overwatch Home Page");
+    console.log("Overwatch Home Page");
 });
 
 ////////////////////////////////////////////////////////
 // ---- All files
 app.get("/api/data", (req, res) => {
-  console.log("All Overwatch Characters Page");
-  res.json({ overwatch, talon, unChara });
+    res.json({ overwatch, talon, unChara });
+    console.log("All Overwatch Characters Page");
 });
 
 ////////////////////////////////////////////////////////
@@ -27,107 +45,92 @@ app.get("/api/data", (req, res) => {
 // ------------------ OW Team Page
 
 app.get("/overwatch", (req, res) => {
-  console.log("Overwatch Team Page");
-  res.send("Overwatch Team");
+    res.send("Overwatch Team");
+    console.log("Overwatch Team Page");
 });
 
 // ------------------ OW Team API
 
 app.get("/api/overwatch", (req, res) => {
-  console.log("Overwatch Team API");
-  res.json(overwatch);
+    res.json(overwatch);
+    console.log("Overwatch Team API");
 });
 
 // Creating a GET for a specific overwatch character id
-// app.get("/api/overwatch/:id", (req, res, next) => {
-//   const overwatchChara = overwatch.find((f) => f.id == req.params.id);
-//   if (overwatchChara) {
-//     res.json(overwatchChara);
-//     console.log(`Your specified Overwatch Character is ${overwatchChara.Name}`);
-//   } else {
-//     res.status(404).send("Status: 404, <br> Message: 'Character not found'");
-//     console.log("Status: 404, Message: 'Overwatch Character not found'");
-//   }
-// });
-
 app.get("/api/overwatch/:id", (req, res, next) => {
-    const overwatchChara = overwatch.find(f => f.id == req.params.id);
-    if (!overwatchChara) {
-      next({ status: 404, message: "Overwatch character not found" });
-    } else {
-      res.json(overwatchChara);
-    }
-  });
+  const overwatchChara = overwatch.find((f) => f.id == req.params.id);
+  if (!overwatchChara) {
+    console.log(`status: 404, message: "Overwatch character not found"`);
+    return next({ status: 404, message: 'Character not found' });
+  } 
+  else {
+    res.json(overwatchChara);
+    console.log(`Your specified Overwatch Character is ${overwatchChara.Name}`);
+  }
+});
 
 ////////////////////////////////////////////////////////
 // ------------------ Talon File
 app.get("/talon", (req, res) => {
-  console.log("Talon Team Page");
-  res.send("Talon Team");
+    res.send("Talon Team");
+    console.log("Talon Team Page");
 });
 
 // ------------------ Talon API
 app.get("/api/talon", (req, res) => {
-  console.log("Talon Team API");
-  res.json(talon);
+    res.json(talon);
+    console.log("Talon Team API");
 });
 
-// Creating a GET for a specific True Unaligned(unChara) character id
+// Creating a GET for a specific Talon character id
 app.get("/api/talon/:id", (req, res, next) => {
-  const talonChara = talon.find((u) => u.id == req.params.id);
-  if (talonChara) {
+  const talonChara = talon.find((f) => f.id == req.params.id);
+  if (!talonChara) {
+    next({ status: 404, message: "Talon character not found" });
+  } else {
     res.json(talonChara);
     console.log(`Your specified Talon Character is ${talonChara.Name}`);
-  } else {
-    res.status(404).send("Status: 404, <br> Message: 'Character not found'");
-    console.log("Status: 404, Message: 'Talon Character not found'");
   }
 });
 
 ////////////////////////////////////////////////////////
 // ------------------ True Unaligned(unChara) File
 app.get("/unChara", (req, res) => {
-  console.log("True Unaligned Characters Page");
-  res.send("True Unaligned Characters");
+    res.send("True Unaligned Characters");
+    console.log("True Unaligned Characters Page");
 });
 
 // ------------------ True Unaligned(unChara) API
 app.get("/api/unChara", (req, res) => {
-  console.log("True Unaligned Characters API");
-  res.json(unChara);
+    res.json(unChara);
+    console.log("True Unaligned Characters API");
 });
 
-// Creating a GET for a specific True Unaligned(unChara) character id
+// Creating a GET for a specific Unaligned character id
 app.get("/api/unChara/:id", (req, res, next) => {
-  const unCharacter = unChara.find((f) => f.id == req.params.id);
-  if (unCharacter) {
-    res.json(unCharacter);
-    console.log(`Your specified Unaligned Character is ${unCharacter.Name}`);
-  } else {
-    res.status(404).send("Character not found");
-    console.log("Unaligned Character Character not found");
-  }
-});
+    const unCharacter = unChara.find((f) => f.id == req.params.id);
+    if (!unCharacter) {
+      next({ status: 404, message: "Unaligned character not found" });
+    } else {
+      res.json(unCharacter);
+      console.log(`Your specified Unaligned Character is ${unCharacter.Name}`);
+    }
+  });
+
+
+// Error Handling
+  app.use((err, req, res, next) => {
+    console.error(err); // Log the error information for debugging
+    res.status(err.status || 500).send({
+      error: {
+        status: err.status || 500,
+        message: err.message || "Internal Server Error",
+      },
+    });
+  });
 
 ////////////////////////////////////////////////////////
-// ---------- Middleware
-function logger(req, res, next) {
-  console.log("Log");
-  next();
-}
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err); // Log the error information for debugging
-  res.status(err.status || 500); // Send a status code
-  res.send({
-    error: {
-      status: err.status || 500,
-      message: err.message || "Internal Server Error",
-    },
-  });
-});
 
 app.listen(port, () => {
-  console.log(`Server started on port: ${port}`);
-});
+    console.log(`Server is running on http://localhost:${port}`);
+  });
