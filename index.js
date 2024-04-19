@@ -7,6 +7,7 @@ const overwatch = require("./data/overwatch");
 const talon = require("./data/talon");
 const unChara = require("./data/unChara");
 
+
 // Parsing Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
@@ -51,23 +52,78 @@ app.get("/overwatch", (req, res) => {
 
 // ------------------ OW Team API
 
-app.get("/api/overwatch", (req, res) => {
+app
+.route("/api/overwatch")
+.get((req, res) => {
     res.json(overwatch);
     console.log("Overwatch Team API");
-});
+;})
+// -- POST
+app.post("/api/overwatch", (req, res) => {
+
+    const { Name, Description, Role, Location } = req.body;
+    if (Name && Description && Role && Location) {
+      // Check if the hero name already exists
+      if (overwatch.find((f) => f.Name === Name)) {
+        return res.status(409).json({ error: "Name Already Taken" }); 
+      }
+
+      // Create a new hero object
+      const hero = {
+        id: overwatch[overwatch.length - 1].id + 1, // This will generate an id for the new hero
+        Name,
+        Description,
+        Role,
+        Location
+      };
+
+      overwatch.push(hero); // Adding the new hero to the array
+      res.status(201).json(hero); // 201 throws a status as "Created" and (json)hero sends the "hero" object as a JSON string
+    } else {
+      res.status(400).json({ error: "Insufficient Data" }); // 400 Bad Request for missing data
+    }
+  });
+
 
 // Creating a GET for a specific overwatch character id
-app.get("/api/overwatch/:id", (req, res, next) => {
+app
+.route("/api/overwatch/:id")
+.get((req, res, next) => {
   const overwatchChara = overwatch.find((f) => f.id == req.params.id);
   if (!overwatchChara) {
-    console.log(`status: 404, message: "Overwatch character not found"`);
     return next({ status: 404, message: 'Character not found' });
   } 
   else {
     res.json(overwatchChara);
     console.log(`Your specified Overwatch Character is ${overwatchChara.Name}`);
   }
-});
+})
+.patch((req, res, next) => {
+    // Within the PATCH request route, we allow the client to make changes to an existing user in the database.
+    const hero = overwatch.find((u, i) => {
+      if (u.id == req.params.id) {
+        for (const key in req.body) {
+            overwatch[i][key] = req.body[key];
+        }
+        return true;
+      }
+    });
+
+    if (hero) res.json(hero);
+    else next();
+  })
+  .delete((req, res, next) => {
+    // The DELETE request route simply removes a resource.
+    const hero = overwatch.find((u, i) => {
+      if (u.id == req.params.id) {
+        overwatch.splice(i, 1);
+        return true;
+      }
+    });
+
+    if (hero) res.json(hero);
+    else next();
+  });
 
 ////////////////////////////////////////////////////////
 // ------------------ Talon File
@@ -86,7 +142,7 @@ app.get("/api/talon", (req, res) => {
 app.get("/api/talon/:id", (req, res, next) => {
   const talonChara = talon.find((f) => f.id == req.params.id);
   if (!talonChara) {
-    next({ status: 404, message: "Talon character not found" });
+    return next({ status: 404, message: "Talon character not found" });
   } else {
     res.json(talonChara);
     console.log(`Your specified Talon Character is ${talonChara.Name}`);
@@ -110,7 +166,7 @@ app.get("/api/unChara", (req, res) => {
 app.get("/api/unChara/:id", (req, res, next) => {
     const unCharacter = unChara.find((f) => f.id == req.params.id);
     if (!unCharacter) {
-      next({ status: 404, message: "Unaligned character not found" });
+      return next({ status: 404, message: "Unaligned character not found" });
     } else {
       res.json(unCharacter);
       console.log(`Your specified Unaligned Character is ${unCharacter.Name}`);
@@ -121,10 +177,10 @@ app.get("/api/unChara/:id", (req, res, next) => {
 // Error Handling
   app.use((err, req, res, next) => {
     console.error(err); // Log the error information for debugging
-    res.status(err.status || 500).send({
+    res.status(err.status).send({
       error: {
-        status: err.status || 500,
-        message: err.message || "Internal Server Error",
+        status: err.status,
+        message: err.message,
       },
     });
   });
