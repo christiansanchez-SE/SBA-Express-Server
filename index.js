@@ -1,11 +1,20 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
-const bodyParser = require("body-parser");
 
 const overwatch = require("./data/overwatch");
 const talon = require("./data/talon");
 const unChara = require("./data/unChara");
+
+// // Adding route imports, not database imports
+// const overwatch = require("./routes/overwatch");
+// const talon = require("./routes/talon");
+// const unChara = require("./routes/unChara");
+
+// Adding React
+app.set('view engine', 'jsx');
+app.engine('jsx', require('express-react-views').createEngine())
 
 
 // Parsing Middleware
