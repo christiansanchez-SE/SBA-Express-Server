@@ -4,10 +4,10 @@ const router = express.Router();
 const talon = require("../data/talon");
 
 // ------------------ Talon File
-// app.get("/talon", (req, res) => {
-//     res.send("Talon Team");
-//     console.log("Talon Team Page");
-// });
+router.get("/", (req, res,) => {
+    res.json(talon);  // Send the overwatch data as JSON
+    console.log("Talon Team API");
+});
 
 // // ------------------ Talon API
 // app.get("/api/talon", (req, res) => {

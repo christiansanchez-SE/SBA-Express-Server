@@ -2,7 +2,15 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+//Routes
 const overwatchRoutes = require("./routes/overwatch");
+const talonRoutes = require("./routes/talon");
+const unCharaRoutes = require("./routes/unChara");
+
+//Data
+const overwatchData = require("./data/overwatch");
+const talonData = require("./data/talon");
+const unCharaData = require("./data/unChara");
 
 const bodyParser = require("body-parser");
 
@@ -16,8 +24,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Importing overwatchRoutes
 app.use("/api/overwatch", overwatchRoutes);
-// app.use("/api/talon", talonRoutes);
-// app.use("/api/unChara", unCharaRoutes);
+app.use("/api/talon", talonRoutes);
+app.use("/api/unChara", unCharaRoutes);
 
 /////////////////////////////////////////////////////
 // Logging Middlewaare
@@ -34,6 +42,7 @@ app.use((req, res, next) => {
   }
   next();
 });
+
 /////////////////////////////////////////////////////
 // ------------------ Home Page
 app.get("/", (req, res) => {
@@ -42,8 +51,12 @@ app.get("/", (req, res) => {
 });
 
 // ---- All files
-app.get("/api/overwatch", (req, res) => {
-  res.json({ overwatch: overwatchRoutes });
+app.get("/api/overwatchRoster", (req, res) => {
+  res.json({
+    overwatch: overwatchData,
+    talon: talonData,
+    unChara: unCharaData
+  });
   console.log("All Overwatch Characters Page");
 });
 

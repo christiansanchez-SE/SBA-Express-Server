@@ -4,10 +4,10 @@ const router = express.Router();
 const unChara = require("../data/unChara");
 
 // // ------------------ True Unaligned(unChara) File
-// app.get("/unChara", (req, res) => {
-//     res.send("True Unaligned Characters");
-//     console.log("True Unaligned Characters Page");
-// });
+router.get("/", (req, res,) => {
+    res.json(unChara);  // Send the overwatch data as JSON
+    console.log("Unaligned Team API");
+});
 
 // // ------------------ True Unaligned(unChara) API
 // app.get("/api/unChara", (req, res) => {
