@@ -1,4 +1,4 @@
-const overwatch = [
+const overwatchData = [
     {
         id: 1,
         Name: 'Winston',
@@ -43,4 +43,4 @@ const overwatch = [
     }
 ]
 
-module.exports = overwatch;
+module.exports = overwatchData;
