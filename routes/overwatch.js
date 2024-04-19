@@ -52,31 +52,31 @@ router
     console.log(`Your specified Overwatch Character is ${overwatchChara.Name}`);
   }
 })
-// .patch((req, res, next) => {
-//     // Within the PATCH request route, we allow the client to make changes to an existing user in the database.
-//     const hero = overwatch.find((u, i) => {
-//       if (u.id == req.params.id) {
-//         for (const key in req.body) {
-//             overwatch[i][key] = req.body[key];
-//         }
-//         return true;
-//       }
-//     });
+.patch((req, res, next) => {
+    // Within the PATCH request route, we allow the client to make changes to an existing user in the database.
+    const hero = overwatch.find((u, i) => {
+      if (u.id == req.params.id) {
+        for (const key in req.body) {
+            overwatch[i][key] = req.body[key];
+        }
+        return true;
+      }
+    });
 
-//     if (hero) res.json(hero);
-//     else next();
-//   })
-//   .delete((req, res, next) => {
-//     // The DELETE request route simply removes a resource.
-//     const hero = overwatch.find((u, i) => {
-//       if (u.id == req.params.id) {
-//         overwatch.splice(i, 1);
-//         return true;
-//       }
-//     });
+    if (hero) res.json(hero);
+    else next();
+  })
+  .delete((req, res, next) => {
+    // The DELETE request route simply removes a resource.
+    const hero = overwatch.find((u, i) => {
+      if (u.id == req.params.id) {
+        overwatch.splice(i, 1);
+        return true;
+      }
+    });
 
-//     if (hero) res.json(hero);
-//     else next();
-//   });
+    if (hero) res.json(hero);
+    else next();
+  });
 
   module.exports = router;

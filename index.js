@@ -22,12 +22,6 @@ app.engine("jsx", require("express-react-views").createEngine());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Importing overwatchRoutes
-app.use("/api/overwatch", overwatchRoutes);
-app.use("/api/talon", talonRoutes);
-app.use("/api/unChara", unCharaRoutes);
-
-/////////////////////////////////////////////////////
 // Logging Middlewaare
 app.use((req, res, next) => {
   const time = new Date();
@@ -43,7 +37,11 @@ app.use((req, res, next) => {
   next();
 });
 
-/////////////////////////////////////////////////////
+// Importing overwatchRoutes
+app.use("/api/overwatch", overwatchRoutes);
+app.use("/api/talon", talonRoutes);
+app.use("/api/unChara", unCharaRoutes);
+
 // ------------------ Home Page
 app.get("/", (req, res) => {
   res.send("Overwatch Home Page");
