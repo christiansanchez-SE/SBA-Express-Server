@@ -18,9 +18,23 @@ const bodyParser = require("body-parser");
 app.set("view engine", "jsx");
 app.engine("jsx", require("express-react-views").createEngine());
 
+// app.use(express.static('public'))
+
 app.get("/overwatch", (req, res) => {
   res.render ("Overwatch", {
     overwatchData: overwatchData
+  })
+})
+
+app.get("/talon", (req, res) => {
+  res.render ("Talon", {
+    talonData: talonData
+  })
+})
+
+app.get("/unChara", (req, res) => {
+  res.render ("UnChara", {
+    unCharaData: unCharaData
   })
 })
 
