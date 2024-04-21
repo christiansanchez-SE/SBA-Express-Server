@@ -18,6 +18,18 @@ const bodyParser = require("body-parser");
 app.set("view engine", "jsx");
 app.engine("jsx", require("express-react-views").createEngine());
 
+app.get("/overwatch", (req, res) => {
+  res.render ("Overwatch", {
+    overwatchData: overwatchData
+  })
+})
+
+// ------------------ Home Page
+app.get("/", (req, res) => {
+  res.send("Overwatch Home Page");
+  console.log("Overwatch Home Page");
+});
+
 // Parsing Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,12 +53,6 @@ app.use((req, res, next) => {
 app.use("/api/overwatch", overwatchRoutes);
 app.use("/api/talon", talonRoutes);
 app.use("/api/unChara", unCharaRoutes);
-
-// ------------------ Home Page
-app.get("/", (req, res) => {
-  res.send("Overwatch Home Page");
-  console.log("Overwatch Home Page");
-});
 
 // ---- All files
 app.get("/api/overwatchRoster", (req, res) => {

@@ -42,12 +42,12 @@ router
 .route("/:id")
 .get((req, res, next) => {
   const talonChara = talon.find((f) => f.id == req.params.id);
-  if (!talonChara) {
-    return next({ status: 404, message: 'Character not found' });
-  } 
-  else {
+  if (talonChara) {
     res.json(talonChara);
     console.log(`Your specified Overwatch Character is ${talonChara.Name}`);
+  } 
+  else {
+    next({ status: 404, message: 'Character not found' });
   }
 })
 .patch((req, res, next) => {

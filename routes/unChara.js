@@ -43,12 +43,12 @@ router
 .route("/:id")
 .get((req, res, next) => {
   const unCharacter = unChara.find((f) => f.id == req.params.id);
-  if (!unCharacter) {
-    return next({ status: 404, message: 'Character not found' });
-  } 
-  else {
+  if (unCharacter) {
     res.json(unCharacter);
     console.log(`Your specified Overwatch Character is ${unCharacter.Name}`);
+  } 
+  else {
+     next({ status: 404, message: 'Character not found' });
   }
 })
 .patch((req, res, next) => {
