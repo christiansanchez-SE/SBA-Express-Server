@@ -11,12 +11,12 @@ export default class Overwatch extends Component {
         return (
         <>
           <div>
-            <h1 style={myStyle} >Characters Index Page</h1>
+            <h1 style={myStyle} >Overwatch Characters Index Page</h1>
             <ul>
               {overwatchData.map((Character, i) => {
                 return (
                   <li key={i}>
-                    <a href={`/overwatchData/${i}`}>{Character.Name}</a> role is a {Character.Role}. {Character.Description} There location is at {Character.Location}{" "}
+                    <a href={`/overwatchData/${i}`}><strong>{Character.Name}</strong></a> role is a {Character.Role}. {Character.Description} There location is at {Character.Location}<hr></hr>{" "}
                   </li>
                 );
               })}

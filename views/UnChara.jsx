@@ -15,8 +15,9 @@ export default class UnChara extends Component {
               {unCharaData.map((Character, i) => {
                 return (
                   <li key={i}>
-                    <a href={`/unCharaData/${i}`}>{Character.Name}</a> role is a {Character.Role}. {Character.Description} There location is at {Character.Location}.{" "}
+                     <a href="/overwatchData/{i}"><strong>{Character.Name}</strong></a> role is a {Character.Role}. {Character.Description} Their location is at {Character.Location}<hr></hr>{" "}
                   </li>
+                  
                 );
               })}
             </ul>
